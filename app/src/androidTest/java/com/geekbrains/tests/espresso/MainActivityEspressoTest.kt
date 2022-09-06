@@ -1,5 +1,6 @@
 package com.geekbrains.tests.espresso
 
+import TEST_NUMBER_FAKE
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -35,7 +36,7 @@ class MainActivityEspressoTest {
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
 
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
+            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: $TEST_NUMBER_FAKE")))
         } else {
             onView(isRoot()).perform(delay())
             onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2283")))

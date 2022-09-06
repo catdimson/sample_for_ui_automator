@@ -1,11 +1,11 @@
 package com.geekbrains.tests.automator
 
+import TEST_NUMBER_OF_RESULTS_ZERO
+import TEST_TIMEOUT
+import TEST_NUMBER_REAL
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -14,10 +14,6 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import com.geekbrains.tests.BuildConfig
-import com.geekbrains.tests.R
-import com.geekbrains.tests.repository.FakeGitHubRepository
-import com.geekbrains.tests.repository.GitHubApi
-import com.geekbrains.tests.repository.GitHubRepository
 import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before
@@ -51,7 +47,7 @@ class BehaviorTest {
         context.startActivity(intent)
 
         //Ждем, когда приложение откроется на смартфоне чтобы начать тестировать его элементы
-        uiDevice.wait(Until.hasObject(By.pkg(packageName).depth(0)), TIMEOUT)
+        uiDevice.wait(Until.hasObject(By.pkg(packageName).depth(0)), TEST_TIMEOUT)
     }
 
     //Убеждаемся, что приложение открыто. Для этого достаточно найти на экране любой элемент
@@ -80,14 +76,14 @@ class BehaviorTest {
         val changedText =
             uiDevice.wait(
                 Until.findObject(By.res(packageName, "totalCountTextView")),
-                TIMEOUT
+                TEST_TIMEOUT
             )
         //Убеждаемся, что сервер вернул корректный результат. Обратите внимание, что количество
         //результатов может варьироваться во времени, потому что количество репозиториев постоянно меняется.
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+            Assert.assertEquals(changedText.text.toString(), "Number of results: $TEST_NUMBER_FAKE")
         } else {
-            Assert.assertEquals(changedText.text.toString(), "Number of results: 668")
+            Assert.assertEquals(changedText.text.toString(), "Number of results: $TEST_NUMBER_REAL")
         }
     }
 
@@ -109,14 +105,14 @@ class BehaviorTest {
         val changedText =
             uiDevice.wait(
                 Until.findObject(By.res(packageName, "totalCountTextView")),
-                TIMEOUT
+                TEST_TIMEOUT
             )
         //Убеждаемся, что поле видно и содержит предполагаемый текст.
         //Обратите внимание, что текст должен быть "Number of results: 0",
         //так как мы кликаем по кнопке не отправляя никаких поисковых запросов.
         //Чтобы проверить отображение определенного количества репозиториев,
         //вам в одном и том же методе нужно отправить запрос на сервер и открыть DetailsScreen.
-        Assert.assertEquals(changedText.text, "Number of results: 0")
+        Assert.assertEquals(changedText.text, TEST_NUMBER_OF_RESULTS_ZERO)
     }
 
 
@@ -128,7 +124,7 @@ class BehaviorTest {
         val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
         searchButton.click()
         uiDevice.wait(
-            Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT
+            Until.findObject(By.res(packageName, "totalCountTextView")), TEST_TIMEOUT
         )
         val toDetails: UiObject2 = uiDevice.findObject(
             By.res(packageName, "toDetailsActivityButton")
@@ -137,20 +133,16 @@ class BehaviorTest {
         toDetails.click()
 
         uiDevice.wait(
-            Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT
+            Until.findObject(By.res(packageName, "totalCountTextView")), TEST_TIMEOUT
         )
 
         val searchResult: UiObject2 = uiDevice.findObject(
             By.res(packageName, "totalCountTextView")
         )
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            Assert.assertEquals(searchResult.text.toString(), "Number of results: 42")
+            Assert.assertEquals(searchResult.text.toString(), "Number of results: $TEST_NUMBER_FAKE")
         } else {
-            Assert.assertEquals(searchResult.text.toString(), "Number of results: 668")
+            Assert.assertEquals(searchResult.text.toString(), "Number of results: $TEST_NUMBER_REAL")
         }
-    }
-
-    companion object {
-        private const val TIMEOUT = 5000L
     }
 }
