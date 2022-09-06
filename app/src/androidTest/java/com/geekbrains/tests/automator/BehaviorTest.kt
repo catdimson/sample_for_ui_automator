@@ -126,25 +126,27 @@ class BehaviorTest {
         val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
         editText.text = "UiAutomator"
         val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
+        searchButton.click()
         uiDevice.wait(
             Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT
         )
-        searchButton.click()
-
         val toDetails: UiObject2 = uiDevice.findObject(
             By.res(packageName, "toDetailsActivityButton")
         )
 
         toDetails.click()
 
-        val changedText = uiDevice.wait(
+        uiDevice.wait(
             Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT
         )
 
+        val searchResult: UiObject2 = uiDevice.findObject(
+            By.res(packageName, "totalCountTextView")
+        )
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+            Assert.assertEquals(searchResult.text.toString(), "Number of results: 42")
         } else {
-            Assert.assertEquals(changedText.text.toString(), "Number of results: 668")
+            Assert.assertEquals(searchResult.text.toString(), "Number of results: 668")
         }
     }
 
