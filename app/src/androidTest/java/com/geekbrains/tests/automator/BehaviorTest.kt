@@ -13,7 +13,12 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import com.geekbrains.tests.BuildConfig
 import com.geekbrains.tests.R
+import com.geekbrains.tests.repository.FakeGitHubRepository
+import com.geekbrains.tests.repository.GitHubApi
+import com.geekbrains.tests.repository.GitHubRepository
+import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -66,9 +71,9 @@ class BehaviorTest {
         val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
         //Устанавливаем значение
         editText.text = "UiAutomator"
-        //Отправляем запрос через Espresso
-        Espresso.onView(ViewMatchers.withId(R.id.searchEditText))
-            .perform(ViewActions.pressImeActionButton())
+        //Отправляем запрос через UiAutomator
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
+        searchButton.click()
 
         //Ожидаем конкретного события: появления текстового поля totalCountTextView.
         //Это будет означать, что сервер вернул ответ с какими-то данными, то есть запрос отработал.
@@ -79,7 +84,11 @@ class BehaviorTest {
             )
         //Убеждаемся, что сервер вернул корректный результат. Обратите внимание, что количество
         //результатов может варьироваться во времени, потому что количество репозиториев постоянно меняется.
-        Assert.assertEquals(changedText.text.toString(), "Number of results: 668")
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+        } else {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 668")
+        }
     }
 
     //Убеждаемся, что DetailsScreen открывается
@@ -108,6 +117,37 @@ class BehaviorTest {
         //Чтобы проверить отображение определенного количества репозиториев,
         //вам в одном и том же методе нужно отправить запрос на сервер и открыть DetailsScreen.
         Assert.assertEquals(changedText.text, "Number of results: 0")
+    }
+
+
+    //Убеждаемся, что DetailsScreen открывается и получается нужное кол-во репозиториев
+    @Test
+    fun test_OpenDetailsScreenAndGetCorrectResult() {
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
+        searchButton.click()
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT
+        )
+        val toDetails: UiObject2 = uiDevice.findObject(
+            By.res(packageName, "toDetailsActivityButton")
+        )
+
+        toDetails.click()
+
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT
+        )
+
+        val searchResult: UiObject2 = uiDevice.findObject(
+            By.res(packageName, "totalCountTextView")
+        )
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            Assert.assertEquals(searchResult.text.toString(), "Number of results: 42")
+        } else {
+            Assert.assertEquals(searchResult.text.toString(), "Number of results: 668")
+        }
     }
 
     companion object {
