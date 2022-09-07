@@ -1,8 +1,9 @@
 package com.geekbrains.tests.automator
 
-import TEST_NUMBER_OF_RESULTS_ZERO
-import TEST_TIMEOUT
-import TEST_NUMBER_REAL
+//import TEST_NUMBER_OF_RESULTS_ZERO
+//import TEST_TIMEOUT
+//import TEST_NUMBER_REAL
+//import TEST_NUMBER_FAKE
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
@@ -13,7 +14,10 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
-import com.geekbrains.tests.BuildConfig
+import com.geekbrains.tests.*
+import com.geekbrains.tests.TEST_NUMBER_FAKE
+import com.geekbrains.tests.TEST_NUMBER_REAL
+import com.geekbrains.tests.TEST_TIMEOUT
 import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before

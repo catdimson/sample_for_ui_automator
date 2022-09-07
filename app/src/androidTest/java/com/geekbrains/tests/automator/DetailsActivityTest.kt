@@ -1,9 +1,9 @@
 package com.geekbrains.tests.automator
 
-import TEST_TIME_LOADING_SCREEN
-import TEST_TIMEOUT
-import TEST_NUMBER_FAKE
-import TEST_NUMBER_REAL
+//import TEST_TIME_LOADING_SCREEN
+//import TEST_TIMEOUT
+//import TEST_NUMBER_FAKE
+//import TEST_NUMBER_REAL
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
@@ -11,7 +11,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.*
-import com.geekbrains.tests.BuildConfig
+import com.geekbrains.tests.*
+import com.geekbrains.tests.TEST_NUMBER_FAKE
+import com.geekbrains.tests.TEST_NUMBER_REAL
+import com.geekbrains.tests.TEST_TIMEOUT
 import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before
