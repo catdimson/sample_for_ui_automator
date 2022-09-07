@@ -1,5 +1,9 @@
 package com.geekbrains.tests.automator
 
+//import TEST_TIME_LOADING_SCREEN
+//import TEST_TIMEOUT
+//import TEST_NUMBER_FAKE
+//import TEST_NUMBER_REAL
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
@@ -7,7 +11,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.*
-import com.geekbrains.tests.BuildConfig
+import com.geekbrains.tests.*
+import com.geekbrains.tests.TEST_NUMBER_FAKE
+import com.geekbrains.tests.TEST_NUMBER_REAL
+import com.geekbrains.tests.TEST_TIMEOUT
 import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before
@@ -29,7 +36,7 @@ class DetailsActivityTest {
         intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         context.startActivity(intent)
 
-        uiDevice.wait(Until.hasObject(By.pkg(packageName).depth(0)), TIMEOUT)
+        uiDevice.wait(Until.hasObject(By.pkg(packageName).depth(0)), TEST_TIMEOUT)
 
         val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
         editText.text = "UiAutomator"
@@ -39,7 +46,7 @@ class DetailsActivityTest {
 
         uiDevice.wait(
             Until.findObject(By.res(packageName, "totalCountTextView")),
-            TIMEOUT
+            TEST_TIMEOUT
         )
 
         val toDetails: UiObject2 = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
@@ -52,12 +59,12 @@ class DetailsActivityTest {
     fun test_ActivityDetail_ResultIsVisible() {
         uiDevice.wait(
             Until.findObject(By.res(packageName, "totalCountTextView")),
-            TIME_LOADING_SCREEN
+            TEST_TIME_LOADING_SCREEN
         )
         val resultText: UiObject = if (isFakeData()) {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 42"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_FAKE"))
         } else {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 668"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_REAL"))
         }
         Assert.assertTrue(resultText.exists())
     }
@@ -67,16 +74,16 @@ class DetailsActivityTest {
     fun test_ActivityDetail_WorkDecrementButton() {
         uiDevice.wait(
             Until.findObject(By.res(packageName, "decrementButton")),
-            TIME_LOADING_SCREEN
+            TEST_TIME_LOADING_SCREEN
         )
         val decrementButton: UiObject2 = uiDevice.findObject(
             By.res(packageName, "decrementButton")
         )
         decrementButton.click()
         val resultText: UiObject = if (isFakeData()) {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 42"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_FAKE"))
         } else {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 668"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_REAL"))
         }
         Assert.assertFalse(resultText.exists())
     }
@@ -86,16 +93,16 @@ class DetailsActivityTest {
     fun test_ActivityDetail_WorkIncrementButton() {
         uiDevice.wait(
             Until.findObject(By.res(packageName, "incrementButton")),
-            TIME_LOADING_SCREEN
+            TEST_TIME_LOADING_SCREEN
         )
         val incrementButton: UiObject2 = uiDevice.findObject(
             By.res(packageName, "incrementButton")
         )
         incrementButton.click()
         val resultText: UiObject = if (isFakeData()) {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 42"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_FAKE"))
         } else {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 668"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_REAL"))
         }
         Assert.assertFalse(resultText.exists())
     }// Проверяем, что кнопка декремента меняет значение
@@ -104,16 +111,16 @@ class DetailsActivityTest {
     fun test_ActivityDetail_CorrectWorkDecrementButton() {
         uiDevice.wait(
             Until.findObject(By.res(packageName, "decrementButton")),
-            TIME_LOADING_SCREEN
+            TEST_TIME_LOADING_SCREEN
         )
         val decrementButton: UiObject2 = uiDevice.findObject(
             By.res(packageName, "decrementButton")
         )
         decrementButton.click()
         val resultText: UiObject = if (isFakeData()) {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 41"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: ${TEST_NUMBER_FAKE - 1}"))
         } else {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 667"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: ${TEST_NUMBER_REAL - 1}"))
         }
         Assert.assertTrue(resultText.exists())
     }
@@ -123,16 +130,16 @@ class DetailsActivityTest {
     fun test_ActivityDetail_CorrectWorkIncrementButton() {
         uiDevice.wait(
             Until.findObject(By.res(packageName, "incrementButton")),
-            TIME_LOADING_SCREEN
+            TEST_TIME_LOADING_SCREEN
         )
         val incrementButton: UiObject2 = uiDevice.findObject(
             By.res(packageName, "incrementButton")
         )
         incrementButton.click()
         val resultText: UiObject = if (isFakeData()) {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 43"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: ${TEST_NUMBER_FAKE + 1}"))
         } else {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 669"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: ${TEST_NUMBER_REAL + 1}"))
         }
         Assert.assertTrue(resultText.exists())
     }
@@ -142,19 +149,14 @@ class DetailsActivityTest {
     fun test_ActivityDetailResultIsVisible() {
         uiDevice.wait(
             Until.findObject(By.res(packageName, "totalCountTextView")),
-            TIME_LOADING_SCREEN
+            TEST_TIME_LOADING_SCREEN
         )
         val resultText: UiObject = if (isFakeData()) {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 42"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_FAKE"))
         } else {
-            uiDevice.findObject(UiSelector().textMatches("Number of results: 668"))
+            uiDevice.findObject(UiSelector().textMatches("Number of results: $TEST_NUMBER_REAL"))
         }
         Assert.assertTrue(resultText.exists())
-    }
-
-    companion object {
-        private const val TIMEOUT = 5000L
-        private const val TIME_LOADING_SCREEN = 1000L
     }
 
     private fun isFakeData(): Boolean = BuildConfig.TYPE == MainActivity.FAKE

@@ -50,6 +50,15 @@ android {
             buildConfigField "String", "TYPE", '"REAL"'
         }
     }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/generalTestsData/java"
+        }
+        test {
+            java.srcDirs += "src/generalTestsData/java"
+        }
+    }
 }
 
 dependencies {
